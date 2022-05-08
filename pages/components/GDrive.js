@@ -24,6 +24,7 @@ export default function GDrive() {
 		}).then((res) => {
 			setAccess(res.data.access_token)
 		})
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 	useEffect(() => {
 		if (start) {
@@ -35,6 +36,7 @@ export default function GDrive() {
 			const r = new MediaRecorder(window.stream, options)
 			setMediaRecorder(r)
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [start])
 
 	function test(e) {
@@ -95,8 +97,14 @@ export default function GDrive() {
 		}
 
 		try{
-			const stream = await navigator.mediaDevices.getUserMedia(constraints)
-			window.stream = stream
+			await navigator.mediaDevices.getUserMedia(constraints)
+				.then((stream) => {
+					console.log('test')
+					window.stream = stream
+				})
+				.catch((er) => {
+					console.log(er)
+				})
 
 			const preview = document.getElementById('video-preview')
 			preview.srcObject = stream
